@@ -31,6 +31,9 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+// 3. Başlangıç verilerini (Roller, Admin hesabı, Örnek hizmet ve kayıtlar) yükle
+await BaslangicVerisi.YukleAsync(app.Services);
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
