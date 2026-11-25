@@ -1,0 +1,62 @@
+@model KayitModeli
+@{
+    ViewData["Title"] = "Hayvan Sahibi Üye Kaydı";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Yeni Üye (Hayvan Sahibi) Kaydı</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="Kayit" asp-controller="Hesap" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="AdSoyad" class="form-label fw-semibold"></label>
+                        <input asp-for="AdSoyad" class="form-control" placeholder="Adınız ve Soyadınız" />
+                        <span asp-validation-for="AdSoyad" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Eposta" class="form-label fw-semibold"></label>
+                        <input asp-for="Eposta" class="form-control" placeholder="eposta@ornek.com" />
+                        <span asp-validation-for="Eposta" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Telefon" class="form-label fw-semibold"></label>
+                        <input asp-for="Telefon" class="form-control" placeholder="0500 000 00 00" />
+                        <span asp-validation-for="Telefon" class="text-danger small"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Sifre" class="form-label fw-semibold"></label>
+                            <input asp-for="Sifre" class="form-control" />
+                            <span asp-validation-for="Sifre" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="SifreTekrar" class="form-label fw-semibold"></label>
+                            <input asp-for="SifreTekrar" class="form-control" />
+                            <span asp-validation-for="SifreTekrar" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100">Kayıt Ol</button>
+                </form>
+
+                <hr />
+                <div class="text-center">
+                    <span>Zaten üye misiniz?</span>
+                    <a asp-action="Giris" asp-controller="Hesap" class="fw-semibold text-success">Giriş Yapın</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -27,6 +27,14 @@ builder.Services.AddIdentity<Kullanici, IdentityRole>(ayar =>
 .AddEntityFrameworkStores<KlinikDbContext>()
 .AddDefaultTokenProviders();
 
+// Yetkisiz girişlerde yönlendirilecek sayfalar
+builder.Services.ConfigureApplicationCookie(cerez =>
+{
+    cerez.LoginPath = "/Hesap/Giris";
+    cerez.LogoutPath = "/Hesap/Cikis";
+    cerez.AccessDeniedPath = "/Hesap/ErisimEngellendi";
+});
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

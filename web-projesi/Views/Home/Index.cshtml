@@ -1,8 +1,98 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Ana Sayfa";
+    var hizmetler = ViewBag.Hizmetler as List<KlinikHizmet> ?? new List<KlinikHizmet>();
+    var hekimler = ViewBag.Hekimler as List<Hekim> ?? new List<Hekim>();
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="p-4 mb-4 bg-light rounded-3 border">
+    <div class="container-fluid py-2">
+        <h2 class="fw-bold text-success">Pati Veteriner Kliniği Randevu ve Hasta Takip Sistemi</h2>
+        <p class="col-md-10 fs-6 text-secondary mb-2">
+            Kliniğimizde evcil hayvanlarınızın rutin muayene, aşı takibi, cerrahi operasyon ve bakım işlemleri uzman veteriner hekimlerimiz tarafından gerçekleştirilmektedir.
+        </p>
+        <p class="mb-3">
+            <span class="badge bg-success">Klinik Çalışma Saatleri: 09:00 - 18:00</span>
+        </p>
+
+        @if (User.Identity == null || !User.Identity.IsAuthenticated)
+        {
+            <a asp-controller="Hesap" asp-action="Giris" class="btn btn-success me-2">Giriş Yap</a>
+            <a asp-controller="Hesap" asp-action="Kayit" class="btn btn-outline-success">Hayvan Sahibi Kaydı Oluştur</a>
+        }
+        else
+        {
+            <div class="alert alert-success mb-0 py-2">
+                Hoş geldiniz <strong>@User.Identity.Name</strong>! Üst menüyü kullanarak işlemlerinizi gerçekleştirebilirsiniz.
+            </div>
+        }
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Kliniğin Sunduğu Hizmetler -->
+    <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-white fw-bold text-success">
+                Kliniğimizde Sunulan Hizmetler
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-striped table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Hizmet Adı</th>
+                            <th>Süre</th>
+                            <th class="text-end">Ücret</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var hizmet in hizmetler)
+                        {
+                            <tr>
+                                <td>
+                                    <strong>@hizmet.HizmetAdi</strong>
+                                    @if (!string.IsNullOrEmpty(hizmet.Aciklama))
+                                    {
+                                        <div class="small text-muted">@hizmet.Aciklama</div>
+                                    }
+                                </td>
+                                <td>@hizmet.SureDakika dk</td>
+                                <td class="text-end fw-semibold">@hizmet.Ucret.ToString("N2") TL</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Görevli Veteriner Hekimler -->
+    <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-white fw-bold text-success">
+                Veteriner Hekimlerimiz ve Müsaitlik Saatleri
+            </div>
+            <div class="card-body">
+                @foreach (var hekim in hekimler)
+                {
+                    <div class="border rounded p-3 mb-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0 fw-bold">@hekim.AdSoyad</h6>
+                            <span class="badge bg-secondary">
+                                Mesai: @hekim.MesaiBaslangic.ToString("HH:mm") - @hekim.MesaiBitis.ToString("HH:mm")
+                            </span>
+                        </div>
+                        <div class="small text-muted mt-1">
+                            <strong>Uzmanlık:</strong> @hekim.UzmanlikAlani
+                        </div>
+                        <div class="mt-2">
+                            @foreach (var h in hekim.VerdigiHizmetler)
+                            {
+                                <span class="badge bg-light text-dark border me-1">@h.HizmetAdi</span>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
 </div>
