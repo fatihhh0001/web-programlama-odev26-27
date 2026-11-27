@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using web_projesi.Data;
 using web_projesi.Models.Entities;
+using web_projesi.Services;
 
 // PostgreSQL DateTime uyumluluğu için
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -35,11 +36,14 @@ builder.Services.ConfigureApplicationCookie(cerez =>
     cerez.AccessDeniedPath = "/Hesap/ErisimEngellendi";
 });
 
+// 3. Ortak İş Katmanı (MVC, REST API ve MCP araçları aynı servisi kullanır)
+builder.Services.AddScoped<IKlinikServisi, KlinikServisi>();
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// 3. Başlangıç verilerini (Roller, Admin hesabı, Örnek hizmet ve kayıtlar) yükle
+// 4. Başlangıç verilerini (Roller, Admin hesabı, Örnek hizmet ve kayıtlar) yükle
 await BaslangicVerisi.YukleAsync(app.Services);
 
 if (!app.Environment.IsDevelopment())
