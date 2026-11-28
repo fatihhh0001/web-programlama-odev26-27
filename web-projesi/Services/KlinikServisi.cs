@@ -125,8 +125,12 @@ public class KlinikServisi : IKlinikServisi
             .AsQueryable();
 
         // Eğer istek yapan kişi Admin veya Veteriner değilse, yalnızca kendi hayvanını görebilir
-        if (!tamYetkiliMi && !string.IsNullOrEmpty(istekYapanKullaniciId))
+        if (!tamYetkiliMi)
         {
+            if (string.IsNullOrEmpty(istekYapanKullaniciId))
+            {
+                return null;
+            }
             sorgu = sorgu.Where(eh => eh.SahipId == istekYapanKullaniciId);
         }
 
@@ -201,7 +205,7 @@ public class KlinikServisi : IKlinikServisi
             return IslemSonucuDto.Hatali("Seçilen evcil hayvan sistemde bulunamadı.");
         }
 
-        if (!tamYetkiliMi && !string.IsNullOrEmpty(istekYapanKullaniciId) && hayvan.SahipId != istekYapanKullaniciId)
+        if (!tamYetkiliMi && (string.IsNullOrEmpty(istekYapanKullaniciId) || hayvan.SahipId != istekYapanKullaniciId))
         {
             return IslemSonucuDto.Hatali("Yalnızca kendi evcil hayvanınız için randevu oluşturabilirsiniz.");
         }

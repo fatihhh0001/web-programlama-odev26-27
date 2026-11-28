@@ -1,0 +1,44 @@
+@model KlinikHizmet
+@{
+    ViewData["Title"] = "Hizmet Sil";
+}
+
+<div class="row justify-content-center mt-3">
+    <div class="col-md-6">
+        <div class="card border-danger shadow-sm">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0">Hizmet Silme Onayı</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.Randevular.Count > 0)
+                {
+                    <div class="alert alert-warning">
+                        <strong>Uyarı:</strong> Bu hizmete ait <strong>@Model.Randevular.Count</strong> adet kayıtlı randevu bulunmaktadır. Geçmiş randevu verilerinin korunması için bu hizmet silinemez.
+                    </div>
+                }
+                else
+                {
+                    <p><strong>@Model.HizmetAdi</strong> hizmetini sistemden kalıcı olarak silmek istediğinize emin misiniz?</p>
+                }
+
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Hizmet Adı</dt>
+                    <dd class="col-sm-8">@Model.HizmetAdi</dd>
+
+                    <dt class="col-sm-4">Süre / Ücret</dt>
+                    <dd class="col-sm-8">@Model.SureDakika dk / @Model.Ucret.ToString("N2") TL</dd>
+                </dl>
+            </div>
+            <div class="card-footer bg-white d-flex justify-content-between">
+                <a asp-action="Index" class="btn btn-outline-secondary">Vazgeç</a>
+                @if (Model.Randevular.Count == 0)
+                {
+                    <form asp-action="Sil" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <button type="submit" class="btn btn-danger">Evet, Hizmeti Sil</button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</div>

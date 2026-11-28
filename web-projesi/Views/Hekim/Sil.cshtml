@@ -1,0 +1,47 @@
+@model Hekim
+@{
+    ViewData["Title"] = "Veteriner Hekim Sil";
+}
+
+<div class="row justify-content-center mt-3">
+    <div class="col-md-6">
+        <div class="card border-danger shadow-sm">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0">Veteriner Hekim Silme Onayı</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.Randevular.Count > 0)
+                {
+                    <div class="alert alert-warning">
+                        <strong>Uyarı:</strong> Bu hekime ait <strong>@Model.Randevular.Count</strong> adet kayıtlı randevu bulunmaktadır. Randevu geçmişinin bozulmaması için bu hekim silinemez.
+                    </div>
+                }
+                else
+                {
+                    <p><strong>@Model.AdSoyad</strong> kaydını ve bağlı veteriner giriş hesabını silmek istediğinize emin misiniz?</p>
+                }
+
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Hekim Adı</dt>
+                    <dd class="col-sm-8">@Model.AdSoyad</dd>
+
+                    <dt class="col-sm-4">Uzmanlık</dt>
+                    <dd class="col-sm-8">@Model.UzmanlikAlani</dd>
+
+                    <dt class="col-sm-4">Mesai</dt>
+                    <dd class="col-sm-8">@Model.MesaiBaslangic.ToString("HH:mm") - @Model.MesaiBitis.ToString("HH:mm")</dd>
+                </dl>
+            </div>
+            <div class="card-footer bg-white d-flex justify-content-between">
+                <a asp-action="Index" class="btn btn-outline-secondary">Vazgeç</a>
+                @if (Model.Randevular.Count == 0)
+                {
+                    <form asp-action="Sil" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <button type="submit" class="btn btn-danger">Evet, Hekimi Sil</button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</div>

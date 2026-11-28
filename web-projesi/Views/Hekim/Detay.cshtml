@@ -1,0 +1,53 @@
+@model Hekim
+@{
+    ViewData["Title"] = "Hekim Detayı";
+}
+
+<div class="row justify-content-center mt-3">
+    <div class="col-md-7">
+        <div class="card shadow-sm">
+            <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">@Model.AdSoyad</h5>
+                <span class="badge bg-light text-success">
+                    @Model.MesaiBaslangic.ToString("HH:mm") - @Model.MesaiBitis.ToString("HH:mm")
+                </span>
+            </div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Ad Soyad</dt>
+                    <dd class="col-sm-8">@Model.AdSoyad</dd>
+
+                    <dt class="col-sm-4">Uzmanlık Alanı</dt>
+                    <dd class="col-sm-8">@Model.UzmanlikAlani</dd>
+
+                    <dt class="col-sm-4">Telefon</dt>
+                    <dd class="col-sm-8">@(string.IsNullOrEmpty(Model.Telefon) ? "Belirtilmemiş" : Model.Telefon)</dd>
+
+                    <dt class="col-sm-4">Müsaitlik Saatleri</dt>
+                    <dd class="col-sm-8">@Model.MesaiBaslangic.ToString("HH:mm") - @Model.MesaiBitis.ToString("HH:mm")</dd>
+
+                    <dt class="col-sm-4">Sisteme Giriş Hesabı</dt>
+                    <dd class="col-sm-8">@(Model.Kullanici?.Email ?? "Bağlı hesap yok")</dd>
+
+                    <dt class="col-sm-4">Toplam Randevu</dt>
+                    <dd class="col-sm-8">@Model.Randevular.Count adet</dd>
+
+                    <dt class="col-sm-4">Verebildiği Hizmetler</dt>
+                    <dd class="col-sm-8">
+                        @foreach (var h in Model.VerdigiHizmetler)
+                        {
+                            <span class="badge bg-light text-dark border me-1">@h.HizmetAdi (@h.SureDakika dk)</span>
+                        }
+                    </dd>
+                </dl>
+            </div>
+            <div class="card-footer bg-white d-flex justify-content-between">
+                <a asp-action="Index" class="btn btn-outline-secondary">Listeye Dön</a>
+                <div>
+                    <a asp-action="Duzenle" asp-route-id="@Model.Id" class="btn btn-primary">Düzenle</a>
+                    <a asp-action="Sil" asp-route-id="@Model.Id" class="btn btn-outline-danger">Sil</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

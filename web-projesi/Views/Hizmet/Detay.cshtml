@@ -1,0 +1,55 @@
+@model KlinikHizmet
+@{
+    ViewData["Title"] = "Hizmet Detayı";
+}
+
+<div class="row justify-content-center mt-3">
+    <div class="col-md-7">
+        <div class="card shadow-sm">
+            <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">@Model.HizmetAdi</h5>
+                <span class="badge bg-light text-success">@Model.SureDakika Dakika</span>
+            </div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Hizmet Adı</dt>
+                    <dd class="col-sm-8">@Model.HizmetAdi</dd>
+
+                    <dt class="col-sm-4">Açıklama</dt>
+                    <dd class="col-sm-8">@(string.IsNullOrEmpty(Model.Aciklama) ? "Açıklama girilmemiş." : Model.Aciklama)</dd>
+
+                    <dt class="col-sm-4">İşlem Süresi</dt>
+                    <dd class="col-sm-8">@Model.SureDakika dakika (randevu çakışma hesabına dahil edilir)</dd>
+
+                    <dt class="col-sm-4">Hizmet Ücreti</dt>
+                    <dd class="col-sm-8 fw-bold text-success">@Model.Ucret.ToString("N2") TL</dd>
+
+                    <dt class="col-sm-4">Kayıtlı Randevu</dt>
+                    <dd class="col-sm-8">@Model.Randevular.Count adet</dd>
+
+                    <dt class="col-sm-4">Bu Hizmeti Veren Hekimler</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.Hekimler.Count == 0)
+                        {
+                            <span class="text-muted">Henüz bu hizmete atanmış hekim bulunmuyor.</span>
+                        }
+                        else
+                        {
+                            @foreach (var hekim in Model.Hekimler)
+                            {
+                                <span class="badge bg-light text-dark border me-1">@hekim.AdSoyad</span>
+                            }
+                        }
+                    </dd>
+                </dl>
+            </div>
+            <div class="card-footer bg-white d-flex justify-content-between">
+                <a asp-action="Index" class="btn btn-outline-secondary">Listeye Dön</a>
+                <div>
+                    <a asp-action="Duzenle" asp-route-id="@Model.Id" class="btn btn-primary">Düzenle</a>
+                    <a asp-action="Sil" asp-route-id="@Model.Id" class="btn btn-outline-danger">Sil</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,6 @@
+using System.Globalization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using web_projesi.Data;
 using web_projesi.Models.Entities;
@@ -42,6 +44,19 @@ builder.Services.AddScoped<IKlinikServisi, KlinikServisi>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+// Ondalıklı sayı (Ücret, Kilo vb.) formlarında HTML5 input uyumu için kültür ayarı
+var kultur = new CultureInfo("tr-TR");
+kultur.NumberFormat.NumberDecimalSeparator = ".";
+kultur.NumberFormat.CurrencyDecimalSeparator = ".";
+kultur.NumberFormat.NumberGroupSeparator = ",";
+kultur.NumberFormat.CurrencyGroupSeparator = ",";
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture(kultur),
+    SupportedCultures = new List<CultureInfo> { kultur },
+    SupportedUICultures = new List<CultureInfo> { kultur }
+});
 
 // 4. Başlangıç verilerini (Roller, Admin hesabı, Örnek hizmet ve kayıtlar) yükle
 await BaslangicVerisi.YukleAsync(app.Services);

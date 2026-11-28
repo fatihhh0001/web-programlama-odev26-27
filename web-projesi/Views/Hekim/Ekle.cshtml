@@ -1,0 +1,97 @@
+@model HekimFormModeli
+@{
+    ViewData["Title"] = "Yeni Veteriner Hekim Ekle";
+    var tumHizmetler = ViewBag.TumHizmetler as List<KlinikHizmet> ?? new List<KlinikHizmet>();
+}
+
+<div class="row justify-content-center mt-3">
+    <div class="col-md-7">
+        <div class="card shadow-sm">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Yeni Veteriner Hekim Tanımla</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="Ekle" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="AdSoyad" class="form-label fw-semibold"></label>
+                            <input asp-for="AdSoyad" class="form-control" placeholder="Örn: Vet. Hekim Can Kaya" />
+                            <span asp-validation-for="AdSoyad" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="UzmanlikAlani" class="form-label fw-semibold"></label>
+                            <input asp-for="UzmanlikAlani" class="form-control" placeholder="Örn: Küçük Hayvan, Cerrahi, Egzotik" />
+                            <span asp-validation-for="UzmanlikAlani" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="Telefon" class="form-label fw-semibold"></label>
+                            <input asp-for="Telefon" class="form-control" placeholder="0500 000 00 00" />
+                            <span asp-validation-for="Telefon" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="MesaiBaslangic" class="form-label fw-semibold"></label>
+                            <input asp-for="MesaiBaslangic" type="time" asp-format="{0:HH:mm}" class="form-control" />
+                            <span asp-validation-for="MesaiBaslangic" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="MesaiBitis" class="form-label fw-semibold"></label>
+                            <input asp-for="MesaiBitis" type="time" asp-format="{0:HH:mm}" class="form-control" />
+                            <span asp-validation-for="MesaiBitis" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Verebildiği Hizmetler</label>
+                        <div class="border rounded p-3 bg-light">
+                            <div class="row">
+                                @foreach (var hizmet in tumHizmetler)
+                                {
+                                    bool seciliMi = Model.SecilenHizmetIdleri != null && Model.SecilenHizmetIdleri.Contains(hizmet.Id);
+                                    <div class="col-md-6 mb-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="SecilenHizmetIdleri"
+                                                   value="@hizmet.Id" id="hizmet_@hizmet.Id" @(seciliMi ? "checked" : "") />
+                                            <label class="form-check-label" for="hizmet_@hizmet.Id">
+                                                @hizmet.HizmetAdi <span class="text-muted small">(@hizmet.SureDakika dk)</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <span asp-validation-for="SecilenHizmetIdleri" class="text-danger small"></span>
+                    </div>
+
+                    <hr />
+                    <h6 class="text-secondary fw-bold">Hekimin Sisteme Giriş Hesabı (Veteriner Rolü)</h6>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="HesapEposta" class="form-label fw-semibold"></label>
+                            <input asp-for="HesapEposta" class="form-control" placeholder="vet3@ornek.com" />
+                            <span asp-validation-for="HesapEposta" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="HesapSifre" class="form-label fw-semibold"></label>
+                            <input asp-for="HesapSifre" type="text" class="form-control" />
+                            <span asp-validation-for="HesapSifre" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-2">
+                        <a asp-action="Index" class="btn btn-outline-secondary">İptal</a>
+                        <button type="submit" class="btn btn-success">Hekimi Kaydet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
